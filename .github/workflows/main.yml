@@ -11,8 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with:
-          node-version: current
       - run: npm run build
       - uses: JS-DevTools/npm-publish@v1
         with:
