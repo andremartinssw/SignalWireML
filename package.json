@@ -9,6 +9,7 @@
     "build": "tsc",
     "test": "jest"
   },
+  "license": "MIT",
   "devDependencies": {
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6"
