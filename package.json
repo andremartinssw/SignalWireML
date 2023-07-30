@@ -1,8 +1,8 @@
 {
   "name": "signalwireml",
-  "version": "0.0.2",
-  "main": "dist/src/SignalWireML/index.js",
-  "types": "dist/src/SignalWireML/index.d.ts",
+  "version": "0.0.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "git@github.com:andremartinssw/SignalWireML.git",
   "author": "André Martins",
   "scripts": {
