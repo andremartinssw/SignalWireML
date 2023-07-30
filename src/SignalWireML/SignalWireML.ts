@@ -1,3 +1,4 @@
+import YAML from 'yaml';
 import { Section } from "./Section";
 
 type Cond = {
@@ -76,7 +77,7 @@ type AI = {
         post_prompt_auth_user?: string;
         post_prompt_auth_password?: string;
         params?: AIParams;
-        SWAIG?: { [key: string]: any }[];
+        SWAIG?: SWAIG;
         hints?: string[];
         languages?: { name: string; code: string; voice?: string }[];
     };
@@ -132,7 +133,7 @@ type Connect = {
     connect: {
         destination?: string;
         from?: string;
-        headers?: { [key: string]: string };
+        headers?: { [key: string]: any };
         codecs?: string;
         webrtc_media?: boolean;
         session_timeout?: number;
@@ -281,6 +282,29 @@ type StopTap = {
     };
 };
 
+type SWAIG = {
+    defaults?: {
+        web_hook_url?: string;
+        web_hook_auth_user?: string;
+        web_hook_auth_password?: string;
+        meta_data?: { [key: string]: any };
+        meta_data_token?: string;
+    };
+    native_functions?: string[];
+    includes?: [ { [key: string]: any } ];
+    functions?: {
+        'function': string;
+        web_hook_url?: string;
+        web_hook_auth_user?: string;
+        web_hook_auth_pass?: string;
+        purpose: string;
+        argument: {
+            type: string | { [ key: string ]: any };
+            properties: { [ key: string ]: any }
+        };
+    }[];
+};
+
 type Tap = {
     tap: {
         uri: string;
@@ -302,9 +326,6 @@ export type Instruction =
     | Transfer
     | Unset
     | AI
-    | AIParams
-    | AIPrompt
-    | AIPostPrompt
     | Answer
     | Connect
     | Denoise
@@ -312,8 +333,6 @@ export type Instruction =
     | JoinRoom
     | Play
     | Prompt
-    | PromptSwitch
-    | PromptCond
     | ReceiveFax
     | Record
     | RecordCall
@@ -341,6 +360,10 @@ export class SignalWireML {
 
     toJSON(): string {
         return JSON.stringify({ sections: this.sections }, null, 4);
+    }
+
+    toYAML(): string {
+        return YAML.stringify({ sections: this.sections })
     }
 }
 
