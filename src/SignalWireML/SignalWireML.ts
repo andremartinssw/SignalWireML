@@ -123,7 +123,7 @@ type AIPostPrompt = {
     frequency_penalty?: number;
 };
 
-type Answer = {
+type Answer = "answer" | {
     answer: {
         max_duration?: number
     }
