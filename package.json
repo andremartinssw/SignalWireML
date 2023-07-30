@@ -1,9 +1,22 @@
 {
+  "name": "signalwireml",
+  "version": "0.0.1",
+  "main": "dist/src/SignalWireML/index.js",
+  "types": "dist/src/SignalWireML/index.d.ts",
+  "repository": "git@github.com:andremartinssw/SignalWireML.git",
+  "author": "André Martins",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
   "devDependencies": {
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "yaml": "^2.3.1"
-  }
+  },
+  "files": [
+    "dist/**/*"
+  ]
 }
