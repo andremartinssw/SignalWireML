@@ -1,11 +1,11 @@
-import YAML from 'yaml';
+import YAML from "yaml";
 import { Section } from "./Section";
 
 type Cond = {
     cond: {
         when: string;
         then: Section;
-        default: Section;
+        else: Section;
     };
 };
 
@@ -13,6 +13,7 @@ type Execute = {
     execute: {
         dest: string;
         params?: { [key: string]: any };
+        meta?: { [key: string]: any };
         on_return?: Section;
     };
 };
@@ -22,24 +23,25 @@ type Goto = {
         label: string;
         when?: string;
         max?: number;
-        meta?: { [key: string]: any }
+        meta?: { [key: string]: any };
     };
 };
 
 type Request = {
     request: {
         url: string;
-        method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+        method: "GET" | "POST" | "PUT" | "DELETE";
         headers?: { [key: string]: any };
         body?: string | { [key: string]: any };
         timeout?: number;
         connect_timeout?: number;
+        result?: Cond | Switch | Array<Cond | Switch>;
         save_variables?: boolean;
     };
 };
 
 type Return = {
-    "return": { [key: string]: any };
+    return: string | { [key: string]: any };
 };
 
 type Set = {
@@ -47,10 +49,10 @@ type Set = {
 };
 
 type Switch = {
-    'switch': {
+    switch: {
         variable: string;
         case?: { [key: number]: Section };
-        default?: Section
+        default?: Section;
     };
 };
 
@@ -59,12 +61,13 @@ type Transfer = {
         dest: string;
         params?: { [key: string]: any };
         meta?: { [key: string]: any };
+        result?: Cond | Switch | Array<Cond | Switch>;
     };
 };
 
 type Unset = {
-    unset: { 
-        vars: string | string[]
+    unset: {
+        vars: string | string[];
     };
 };
 
@@ -80,6 +83,7 @@ type AI = {
         SWAIG?: SWAIG;
         hints?: string[];
         languages?: { name: string; code: string; voice?: string }[];
+        pronounce?: { replace: string; with: string; ignore_case?: boolean }[];
     };
 };
 
@@ -101,16 +105,16 @@ type AIParams = {
     digit_terminators?: string;
     energy_level?: number;
     swaig_allow_swml?: boolean;
-}
+};
 
 type AIPrompt = {
     text?: string;
     temperature?: number;
     top_p?: number;
     confidence?: number;
-    barge_confidence?: number;
     presence_penalty?: number;
     frequency_penalty?: number;
+    result?: Cond | Switch | Array<Cond | Switch>;
 };
 
 type AIPostPrompt = {
@@ -118,26 +122,33 @@ type AIPostPrompt = {
     temperature?: number;
     top_p?: number;
     confidence?: number;
-    barge_confidence?: number;
     presence_penalty?: number;
     frequency_penalty?: number;
+    result?: Cond | Switch | Array<Cond | Switch>;
 };
 
-type Answer = "answer" | {
-    answer: {
-        max_duration?: number
-    }
-}
+type Answer =
+    | "answer"
+    | {
+          answer: {
+              max_duration?: number;
+          };
+      };
 
 type Connect = {
     connect: {
-        destination?: string;
         from?: string;
         headers?: { [key: string]: any };
         codecs?: string;
         webrtc_media?: boolean;
         session_timeout?: number;
         ringback?: string[];
+        timeout?: number;
+        max_duration?: number;
+        answer_on_bridge?: boolean;
+        call_state_url?: string;
+        call_state_events?: string[];
+        result?: Cond | Switch | Array<Cond|Switch>;
     };
 };
 
@@ -149,15 +160,15 @@ type Denoise = {
 
 type Hangup = {
     hangup: {
-        reason?: "hangup" | "busy" | "decline"
-    }
-}
+        reason?: "hangup" | "busy" | "decline";
+    };
+};
 
 type JoinRoom = {
     join_room: {
         name: string;
-    }
-}
+    };
+};
 
 type Play = {
     play: {
@@ -185,20 +196,20 @@ type Prompt = {
         speech_end_timeout?: number;
         speech_language?: string;
         speech_hints?: string[];
-        result?
-    }
-}
+        result?: Cond | Switch | Array<Cond|Switch>;
+    };
+};
 
 type PromptSwitch = {
     case?: { [key: number]: Section };
-    default?: Section
-}
+    default?: Section;
+};
 
 type PromptCond = {
     when: string;
     then: Section;
     default: Section;
-}
+};
 
 type ReceiveFax = {
     receive_fax: {
@@ -216,15 +227,15 @@ type Record = {
         input_sensitivity?: number;
         initial_timeout?: number;
         end_silence_timeout?: number;
-    }
-}
+    };
+};
 
 type RecordCall = {
     record_call: {
         control_id?: string;
         stereo?: boolean;
         format?: string;
-        direction?: 'speak' | 'hear' | 'both';
+        direction?: "speak" | "hear" | "both";
         terminators?: string;
         beep?: boolean;
         input_sensitivity?: number;
@@ -261,6 +272,7 @@ type SendSMS = {
 type SIPRefer = {
     sip_refer: {
         to_uri: string;
+        result?: Cond | Switch | Array<Cond|Switch>;
     };
 };
 
@@ -287,22 +299,45 @@ type SWAIG = {
         web_hook_url?: string;
         web_hook_auth_user?: string;
         web_hook_auth_password?: string;
-        meta_data?: { [key: string]: any };
-        meta_data_token?: string;
     };
-    native_functions?: string[];
-    includes?: [ { [key: string]: any } ];
+    native_functions?: {
+        check_time: string;
+        wait_seconds: string;
+    }[];
+    includes?: [{ [key: string]: any }];
     functions?: {
-        'function': string;
+        active?: boolean;
+        function: string;
+        meta_data?: { name: string; code: string; voice?: string }[];
+        meta_data_token?: string;
+        data_map: {
+            expressions: {
+                string: string;
+                pattern: string;
+                output: {
+                    response: string;
+                    action: [{ [key: string]: any }];
+                };
+            }[];
+            webhooks: {
+                url: string;
+                headers: { [key: string]: any };
+                method: "GET" | "POST" | "PUT" | "DELETE";
+                output: {
+                    action: Instruction[];
+                    response: string;
+                };
+            };
+        }[];
         web_hook_url?: string;
         web_hook_auth_user?: string;
         web_hook_auth_pass?: string;
         purpose: string;
         argument: {
-            type: string | { [ key: string ]: any };
-            properties: { [ key: string ]: any }
+            type: string | { [key: string]: any };
+            properties: { [key: string]: any };
         };
-    }[];
+    };
 };
 
 type Tap = {
@@ -363,7 +398,6 @@ export class SignalWireML {
     }
 
     toYAML(): string {
-        return YAML.stringify({ sections: this.sections })
+        return YAML.stringify({ sections: this.sections });
     }
 }
-
