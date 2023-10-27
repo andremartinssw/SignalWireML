@@ -4,8 +4,8 @@ import { Section } from "./Section";
 type Cond = {
     cond: {
         when: string;
-        then: Section;
-        else: Section;
+        then: Section | Instruction[];
+        else: Section | Instruction[];
     };
 };
 
@@ -14,7 +14,7 @@ type Execute = {
         dest: string;
         params?: { [key: string]: any };
         meta?: { [key: string]: any };
-        on_return?: Section;
+        on_return?: Section | Instruction[];
     };
 };
 
@@ -51,8 +51,8 @@ type Set = {
 type Switch = {
     switch: {
         variable: string;
-        case?: { [key: number]: Section };
-        default?: Section;
+        case?: { [key: number]: Section | Instruction[]; };
+        default?: Section | Instruction[];
     };
 };
 
@@ -198,17 +198,6 @@ type Prompt = {
         speech_hints?: string[];
         result?: Cond | Switch | Array<Cond|Switch>;
     };
-};
-
-type PromptSwitch = {
-    case?: { [key: number]: Section };
-    default?: Section;
-};
-
-type PromptCond = {
-    when: string;
-    then: Section;
-    default: Section;
 };
 
 type ReceiveFax = {
