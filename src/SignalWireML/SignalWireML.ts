@@ -1,7 +1,7 @@
 import YAML from "yaml";
 import { Section } from "./Section";
 
-type Cond = {
+export type Cond = {
     cond: {
         when: string;
         then: Section | Instruction[];
@@ -9,7 +9,7 @@ type Cond = {
     };
 };
 
-type Execute = {
+export type Execute = {
     execute: {
         dest: string;
         params?: { [key: string]: any };
@@ -18,7 +18,7 @@ type Execute = {
     };
 };
 
-type Goto = {
+export type Goto = {
     goto: {
         label: string;
         when?: string;
@@ -27,7 +27,7 @@ type Goto = {
     };
 };
 
-type Request = {
+export type Request = {
     request: {
         url: string;
         method: "GET" | "POST" | "PUT" | "DELETE";
@@ -40,15 +40,15 @@ type Request = {
     };
 };
 
-type Return = {
+export type Return = {
     return: string | { [key: string]: any };
 };
 
-type Set = {
+export type Set = {
     set: { [key: string]: any };
 };
 
-type Switch = {
+export type Switch = {
     switch: {
         variable: string;
         case?: { [key: number]: Section | Instruction[]; };
@@ -56,7 +56,7 @@ type Switch = {
     };
 };
 
-type Transfer = {
+export type Transfer = {
     transfer: {
         dest: string;
         params?: { [key: string]: any };
@@ -65,13 +65,13 @@ type Transfer = {
     };
 };
 
-type Unset = {
+export type Unset = {
     unset: {
         vars: string | string[];
     };
 };
 
-type AI = {
+export type AI = {
     ai: {
         voice?: string;
         prompt?: AIPrompt;
@@ -87,7 +87,7 @@ type AI = {
     };
 };
 
-type AIParams = {
+export type AIParams = {
     direction?: "inbound" | "outbound";
     wait_for_user?: boolean;
     end_of_speech_timeout?: number;
@@ -107,7 +107,7 @@ type AIParams = {
     swaig_allow_swml?: boolean;
 };
 
-type AIPrompt = {
+export type AIPrompt = {
     text?: string;
     temperature?: number;
     top_p?: number;
@@ -117,7 +117,7 @@ type AIPrompt = {
     result?: Cond | Switch | Array<Cond | Switch>;
 };
 
-type AIPostPrompt = {
+export type AIPostPrompt = {
     text?: string;
     temperature?: number;
     top_p?: number;
@@ -127,7 +127,7 @@ type AIPostPrompt = {
     result?: Cond | Switch | Array<Cond | Switch>;
 };
 
-type Answer =
+export type Answer =
     | "answer"
     | {
           answer: {
@@ -135,7 +135,7 @@ type Answer =
           };
       };
 
-type Connect = {
+export type Connect = {
     connect: {
         from?: string;
         headers?: { [key: string]: any };
@@ -152,25 +152,25 @@ type Connect = {
     };
 };
 
-type Denoise = {
+export type Denoise = {
     denoise: {
         [key: string]: any;
     };
 };
 
-type Hangup = {
+export type Hangup = {
     hangup: {
         reason?: "hangup" | "busy" | "decline";
     };
 };
 
-type JoinRoom = {
+export type JoinRoom = {
     join_room: {
         name: string;
     };
 };
 
-type Play = {
+export type Play = {
     play: {
         url?: string;
         urls?: string[];
@@ -181,7 +181,7 @@ type Play = {
     };
 };
 
-type Prompt = {
+export type Prompt = {
     prompt: {
         play: string | string[];
         volume?: number;
@@ -200,13 +200,13 @@ type Prompt = {
     };
 };
 
-type ReceiveFax = {
+export type ReceiveFax = {
     receive_fax: {
         [key: string]: any;
     };
 };
 
-type Record = {
+export type Record = {
     record: {
         stereo?: boolean;
         format?: "wav" | "mp3";
@@ -219,7 +219,7 @@ type Record = {
     };
 };
 
-type RecordCall = {
+export type RecordCall = {
     record_call: {
         control_id?: string;
         stereo?: boolean;
@@ -233,13 +233,13 @@ type RecordCall = {
     };
 };
 
-type SendDigits = {
+export type SendDigits = {
     send_digits: {
         digits: string;
     };
 };
 
-type SendFax = {
+export type SendFax = {
     send_fax: {
         document: string;
         header_info?: string;
@@ -247,7 +247,7 @@ type SendFax = {
     };
 };
 
-type SendSMS = {
+export type SendSMS = {
     send_sms: {
         to_number: string;
         from_number: string;
@@ -258,32 +258,32 @@ type SendSMS = {
     };
 };
 
-type SIPRefer = {
+export type SIPRefer = {
     sip_refer: {
         to_uri: string;
         result?: Cond | Switch | Array<Cond|Switch>;
     };
 };
 
-type StopDenoise = {
+export type StopDenoise = {
     stop_denoise: {
         [key: string]: any;
     };
 };
 
-type StopRecordCall = {
+export type StopRecordCall = {
     stop_record_call: {
         control_id?: string;
     };
 };
 
-type StopTap = {
+export type StopTap = {
     stop_tap: {
         control_id?: string;
     };
 };
 
-type SWAIG = {
+export type SWAIG = {
     defaults?: {
         web_hook_url?: string;
         web_hook_auth_user?: string;
@@ -329,7 +329,7 @@ type SWAIG = {
     };
 };
 
-type Tap = {
+export type Tap = {
     tap: {
         uri: string;
         control_id?: string;
@@ -376,10 +376,16 @@ export class SignalWireML {
         this.sections = {};
     }
 
-    addSection(name: string): Section {
-        const section = new Section();
-        this.sections[name] = section.getActions();
-        return section;
+    addSection(name: string | Section): Section {
+        if (name instanceof Section) {
+            // Is Section, no need to instanciate a new Section Object
+            this.sections[name.getName()] = name.getActions();
+            return name;
+        } else {
+            const section = new Section(name);
+            this.sections[name] = section.getActions();
+            return section;
+        }
     }
 
     toJSON(): string {

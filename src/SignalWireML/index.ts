@@ -1,2 +1,2 @@
-export { SignalWireML } from './SignalWireML';
+export * from './SignalWireML';
 export { Section } from './Section';
