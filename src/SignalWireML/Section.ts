@@ -17,7 +17,7 @@ export class Section {
         return this.actions;
     }
 
-    addInstruction<Type extends Instruction | { [key: string]: any }>(instruction: Type): Type {
+    addInstruction<Type extends Instruction>(instruction: Type): Type {
         this.actions.push(instruction);
         return instruction;
     }

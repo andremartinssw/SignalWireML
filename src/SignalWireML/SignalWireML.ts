@@ -51,7 +51,7 @@ export type Set = {
 export type Switch = {
     switch: {
         variable: string;
-        case?: { [key: number]: Section | Instruction[]; };
+        case?: { [key: string]: Section | Instruction[]; };
         default?: Section | Instruction[];
     };
 };
