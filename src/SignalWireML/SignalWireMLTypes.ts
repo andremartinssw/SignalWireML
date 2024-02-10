@@ -36,7 +36,7 @@ export type Instruction =
  * @title RequestMethod
  * @description This type defines the HTTP request method.
  * @enum {string}
- * @const {string} "GET" - Represents an HTTP GET request.
+ * @const {string} GET - Represents an HTTP GET request.
  * @const {string} POST - Represents an HTTP POST request.
  * @const {string} PUT - Represents an HTTP PUT request.
  * @const {string} DELETE - Represents an HTTP DELETE request.

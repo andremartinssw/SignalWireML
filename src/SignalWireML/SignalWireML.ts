@@ -1,7 +1,6 @@
 import YAML from "yaml";
 import { Section } from "./Section";
 
-
 export class SignalWireML {
     private readonly sections: { [key: string]: any[] };
 
