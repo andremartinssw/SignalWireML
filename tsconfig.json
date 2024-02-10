@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
 		"outDir": "./dist",
+		"rootDir": "./src",
 		"allowJs": true,
 		"target": "es5",
 		"esModuleInterop": true,
 		"declaration": true,
 	},
 	"include": [
-		"./src/**/*",
-		"./*"
+		"./src/**/*"
 	]
 }
