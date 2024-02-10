@@ -1,6 +1,6 @@
 {
   "name": "signalwireml",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "dist/SignalWireML/index.js",
   "types": "dist/SignalWireML/index.d.ts",
   "repository": "git@github.com:andremartinssw/SignalWireML.git",
