@@ -561,7 +561,7 @@ export type AIPrompt = {
  * @title Answer
  * @description Answer incoming call and set an optional maximum duration.
  */
-export type Answer =
+export type Answer = "answer" |
 /**
  * @property answer
  * @description Defines the answer structure
