@@ -1,13 +1,14 @@
 {
   "name": "signalwireml",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "dist/SignalWireML/index.js",
   "types": "dist/SignalWireML/index.d.ts",
   "repository": "git@github.com:andremartinssw/SignalWireML.git",
   "author": "André Martins",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "build:test": "npm run build && npm run test"
   },
   "license": "MIT",
   "devDependencies": {
